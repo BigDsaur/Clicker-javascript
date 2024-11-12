@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cookie Clicker Game</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Cookie Clicker</h1>
+      <div id="score">Score: 0</div>
+      <img id="cookie" src="cookie.png" alt="cookie" />
+
+      <!-- Upgrade Buttons -->
+      <button id="click-upgrade">Increase Click Power (Cost: 10)</button>
+      <button id="idle-upgrade">Buy Idle Clicks (Cost: 50)</button>
+      <button id="auto-click-upgrade">Buy Faster Idle (Cost: 100)</button>
+
+      <!-- Display for upgrade stats -->
+      <div id="stats">
+        <h3>Upgrades</h3>
+        <p>Click Power Upgrades: <span id="click-power">1</span></p>
+        <p>Idle Clicks Upgrades: <span id="idle-upgrade-count">0</span></p>
+        <p>
+          Faster Idle Upgrades: <span id="auto-click-upgrade-count">0</span>
+        </p>
+        <p>Total CPS: <span id="total-cps">0</span></p>
+      </div>
+    </div>
+
+    <script src="clicker.js"></script>
+  </body>
+</html>
