@@ -1,23 +1,18 @@
 /* style.css */
 
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
+body, html {
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   background-color: #f8f9fa;
   font-family: Arial, sans-serif;
 }
 
-/* Center container for game content */
 .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
   padding: 20px;
   background-color: #ffffff;
@@ -25,21 +20,9 @@ body {
   border-radius: 8px;
   max-width: 400px;
   width: 100%;
+  position: relative; /* Ensures floating cookies are positioned inside this container */
 }
 
-/* Heading */
-h1 {
-  font-size: 2em;
-  margin-bottom: 20px;
-}
-
-/* Score display */
-#score {
-  font-size: 1.5em;
-  margin-bottom: 20px;
-}
-
-/* Cookie image */
 #cookie {
   width: 150px;
   cursor: pointer;
@@ -51,41 +34,25 @@ h1 {
   transform: scale(0.95); /* Click effect */
 }
 
-/* Upgrade Buttons */
-button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  font-size: 1em;
-  margin-top: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.2s;
+/* Floating cookie styling */
+.floating-cookie {
+  position: absolute;
+  font-size: 1.5em;
+  animation: floatUp 1s ease-out forwards;
+  pointer-events: none; /* Prevent clicks on floating cookies */
+  color: brown;
+  left: 50%;
+  transform: translateX(-50%); /* Center horizontally */
 }
 
-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-button:not(:disabled):hover {
-  background-color: #0056b3;
-}
-
-/* Stats section */
-#stats {
-  margin-top: 20px;
-  text-align: left;
-}
-
-#stats h3 {
-  font-size: 1.2em;
-  margin-bottom: 10px;
-}
-
-#stats p {
-  margin: 5px 0;
+/* Keyframes for floating animation */
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) translateX(-50%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-50px) translateX(-50%);
+    opacity: 0;
+  }
 }

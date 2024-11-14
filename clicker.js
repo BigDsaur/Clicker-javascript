@@ -1,7 +1,4 @@
 // script.js
-
-// hihhuli
-let testscore = 0;
 let score = 0;
 let clickValue = 1;
 let idleValue = 0;       // Points per second from idle clicks
@@ -23,6 +20,7 @@ let autoClickUpgradeCount = 0;
 // Get HTML elements
 const scoreDisplay = document.getElementById("score");
 const cookie = document.getElementById("cookie");
+const floatingCookiesContainer = document.getElementById("floating-cookies");
 const clickUpgradeButton = document.getElementById("click-upgrade");
 const idleUpgradeButton = document.getElementById("idle-upgrade");
 const autoClickUpgradeButton = document.getElementById("auto-click-upgrade");
@@ -68,7 +66,7 @@ clickUpgradeButton.addEventListener("click", () => {
     clickUpgradeCost *= clickMultiplierToggle ? 2 : 1.5;  // Alternate multiplier
     clickMultiplierToggle = !clickMultiplierToggle;  // Toggle multiplier
     clickUpgradeCount++;  // Increase count of this upgrade
-    clickUpgradeButton.textContent = "Increase Click Power (Cost: " + Math.ceil(clickUpgradeCost) + ")";
+    clickUpgradeButton.textContent = "Click Power +1 (Cost: " + Math.ceil(clickUpgradeCost) + ")";
     updateScore();
     updateStats(); // Update stats to reflect new click power
   }
@@ -82,7 +80,7 @@ idleUpgradeButton.addEventListener("click", () => {
     idleUpgradeCost *= idleMultiplierToggle ? 2 : 1.5;  // Alternate multiplier
     idleMultiplierToggle = !idleMultiplierToggle;  // Toggle multiplier
     idleUpgradeCount++;  // Increase count of this upgrade
-    idleUpgradeButton.textContent = "Buy Idle Clicks (Cost: " + Math.ceil(idleUpgradeCost) + ")";
+    idleUpgradeButton.textContent = "Idle Clicks +1 (Cost: " + Math.ceil(idleUpgradeCost) + ")";
     updateScore();
     updateStats();
   }
@@ -117,3 +115,22 @@ let idleClickInterval = setInterval(() => {
 updateScore();
 updateStats();
 click-upgrade-count
+
+function createFloatingCookie() {
+  const floatingCookie = document.createElement("div");
+  floatingCookie.classList.add("floating-cookie");
+  floatingCookie.textContent = "🍪"; // Unicode emoji for cookie
+
+  // Position the floating cookie near the main cookie's position
+  const rect = cookie.getBoundingClientRect();
+  floatingCookie.style.left = `${rect.left + rect.width / 2}px`;
+  floatingCookie.style.top = `${rect.top}px`;
+
+  // Append to floating cookies container
+  floatingCookiesContainer.appendChild(floatingCookie);
+
+  // Remove floating cookie after animation completes
+  setTimeout(() => {
+    floatingCookie.remove();
+  }, 1000); // Match the animation duration in CSS
+}
