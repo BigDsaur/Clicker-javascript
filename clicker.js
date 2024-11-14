@@ -1,6 +1,7 @@
 // script.js
 
-// Initialize variables
+// hihhuli
+let testscore = 0;
 let score = 0;
 let clickValue = 1;
 let idleValue = 0;       // Points per second from idle clicks
