@@ -1,4 +1,3 @@
-// script.js
 let score = 0;
 let clickValue = 1;
 let idleValue = 0;       // Points per second from idle clicks
@@ -12,28 +11,37 @@ let clickMultiplierToggle = true;
 let idleMultiplierToggle = true;
 let autoClickMultiplierToggle = true;
 
-// Counters to track upgrades bought
-let clickUpgradeCount = 0;
-let idleUpgradeCount = 0;
-let autoClickUpgradeCount = 0;
-
 // Get HTML elements
 const scoreDisplay = document.getElementById("score");
 const cookie = document.getElementById("cookie");
-const floatingCookiesContainer = document.getElementById("floating-cookies");
 const clickUpgradeButton = document.getElementById("click-upgrade");
 const idleUpgradeButton = document.getElementById("idle-upgrade");
 const autoClickUpgradeButton = document.getElementById("auto-click-upgrade");
-const clickUpgradeCountDisplay = document.getElementById("click-power");
-const idleUpgradeCountDisplay = document.getElementById("idle-upgrade-count");
-const autoClickUpgradeCountDisplay = document.getElementById("auto-click-upgrade-count");
 const totalCpsDisplay = document.getElementById("total-cps");
-const manualClickPowerDisplay = document.getElementById("manual-click-power");
+const floatingCookiesContainer = document.getElementById("floating-cookies");
 
 // Function to update score display
 function updateScore() {
   scoreDisplay.textContent = "Score: " + score;
   updateButtonStates();
+}
+
+function createFloatingCookie(x, y) {
+  const floatingCookie = document.createElement("div");
+  floatingCookie.classList.add("floating-cookie");
+  floatingCookie.textContent = "🍪"; // Unicode emoji for cookie
+
+  // Set initial position at the cursor location
+  floatingCookie.style.top = `${y}px`;
+  floatingCookie.style.left = `${x}px`;
+
+  // Append to the document body
+  document.body.appendChild(floatingCookie);
+
+  // Remove floating cookie after animation completes
+  setTimeout(() => {
+    floatingCookie.remove();
+  }, 1000); // Match the animation duration in CSS
 }
 
 // Function to enable/disable upgrade buttons based on score
@@ -43,19 +51,20 @@ function updateButtonStates() {
   autoClickUpgradeButton.disabled = score < autoClickUpgradeCost;
 }
 
-// Function to update the stats display (counts, CPS, and manual click power)
 function updateStats() {
-  clickUpgradeCountDisplay.textContent = clickUpgradeCount;
-  idleUpgradeCountDisplay.textContent = idleUpgradeCount;
-  autoClickUpgradeCountDisplay.textContent = autoClickUpgradeCount;
-  totalCpsDisplay.textContent = (idleValue * (1000 / idleInterval)).toFixed(2); // CPS calculation
-  manualClickPowerDisplay.textContent = clickValue; // Display the current manual click power
+  const cps = idleValue * (1000 / idleInterval); // Calculate CPS from idle clicks
+  totalCpsDisplay.textContent = cps.toFixed(2); // Update display
 }
 
-// Function to handle cookie click
-cookie.addEventListener("click", () => {
+
+cookie.addEventListener("click", (event) => {
+  // Increase score
   score += clickValue;
   updateScore();
+
+  // Get cursor position and create floating cookie
+  const { clientX, clientY } = event;
+  createFloatingCookie(clientX, clientY); // Pass cursor coordinates
 });
 
 // Click Upgrade: Increases click power
@@ -65,7 +74,6 @@ clickUpgradeButton.addEventListener("click", () => {
     clickValue += 1;  // Increase click power
     clickUpgradeCost *= clickMultiplierToggle ? 2 : 1.5;  // Alternate multiplier
     clickMultiplierToggle = !clickMultiplierToggle;  // Toggle multiplier
-    clickUpgradeCount++;  // Increase count of this upgrade
     clickUpgradeButton.textContent = "Click Power +1 (Cost: " + Math.ceil(clickUpgradeCost) + ")";
     updateScore();
     updateStats(); // Update stats to reflect new click power
@@ -78,8 +86,7 @@ idleUpgradeButton.addEventListener("click", () => {
     score -= idleUpgradeCost;
     idleValue += 1;  // Increase idle points per second
     idleUpgradeCost *= idleMultiplierToggle ? 2 : 1.5;  // Alternate multiplier
-    idleMultiplierToggle = !idleMultiplierToggle;  // Toggle multiplier
-    idleUpgradeCount++;  // Increase count of this upgrade
+    idleMultiplierToggle =! idleMultiplierToggle;  // Toggle multiplier
     idleUpgradeButton.textContent = "Idle Clicks +1 (Cost: " + Math.ceil(idleUpgradeCost) + ")";
     updateScore();
     updateStats();
@@ -90,47 +97,29 @@ idleUpgradeButton.addEventListener("click", () => {
 autoClickUpgradeButton.addEventListener("click", () => {
   if (score >= autoClickUpgradeCost) {
     score -= autoClickUpgradeCost;
-    idleInterval *= 0.8;  // Reduce the interval for faster idle clicks
+    idleInterval = Math.max(100, idleInterval * 0.9); // Reduce interval by 10%, minimum of 100ms
     autoClickUpgradeCost *= autoClickMultiplierToggle ? 2 : 1.5;  // Alternate multiplier
     autoClickMultiplierToggle = !autoClickMultiplierToggle;  // Toggle multiplier
-    autoClickUpgradeCount++;  // Increase count of this upgrade
     autoClickUpgradeButton.textContent = "Buy Faster Idle (Cost: " + Math.ceil(autoClickUpgradeCost) + ")";
-    clearInterval(idleClickInterval);
-    idleClickInterval = setInterval(() => {
-      score += idleValue;
-      updateScore();
-    }, idleInterval);
     updateScore();
     updateStats();
+    setupIdleClicks()
   }
 });
 
-// Set up the idle click interval
-let idleClickInterval = setInterval(() => {
-  score += idleValue;
-  updateScore();
-}, idleInterval);
+// Idle click function
+function setupIdleClicks() {
+  clearInterval(idleClickInterval);
+  idleClickInterval = setInterval(() => {
+    score += idleValue;
+    updateScore();
+  }, idleInterval);
+}
 
-// Initial score and stats display
+// Initial call to set up idle clicks
+let idleClickInterval;
+setupIdleClicks();
+
+// Initial UI update
 updateScore();
 updateStats();
-click-upgrade-count
-
-function createFloatingCookie() {
-  const floatingCookie = document.createElement("div");
-  floatingCookie.classList.add("floating-cookie");
-  floatingCookie.textContent = "🍪"; // Unicode emoji for cookie
-
-  // Position the floating cookie near the main cookie's position
-  const rect = cookie.getBoundingClientRect();
-  floatingCookie.style.left = `${rect.left + rect.width / 2}px`;
-  floatingCookie.style.top = `${rect.top}px`;
-
-  // Append to floating cookies container
-  floatingCookiesContainer.appendChild(floatingCookie);
-
-  // Remove floating cookie after animation completes
-  setTimeout(() => {
-    floatingCookie.remove();
-  }, 1000); // Match the animation duration in CSS
-}

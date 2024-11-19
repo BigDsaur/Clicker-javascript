@@ -5,7 +5,7 @@ body, html {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f8f9fa;
+  background-color: #0e447a;
   font-family: Arial, sans-serif;
 }
 
@@ -31,28 +31,26 @@ body, html {
 }
 
 #cookie:active {
-  transform: scale(0.95); /* Click effect */
+  transform: scale(0.90); /* Click effect */
 }
 
-/* Floating cookie styling */
 .floating-cookie {
   position: absolute;
   font-size: 1.5em;
-  animation: floatUp 1s ease-out forwards;
-  pointer-events: none; /* Prevent clicks on floating cookies */
+  animation: floatUpCursor 1s ease-out forwards;
+  pointer-events: none; /* Prevent interaction with floating cookies */
   color: brown;
-  left: 50%;
-  transform: translateX(-50%); /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center the emoji relative to the cursor */
 }
 
 /* Keyframes for floating animation */
-@keyframes floatUp {
+@keyframes floatUpCursor {
   0% {
-    transform: translateY(0) translateX(-50%);
+    transform: translate(-50%, -50%) translateY(0);
     opacity: 1;
   }
   100% {
-    transform: translateY(-50px) translateX(-50%);
-    opacity: 0;
+    transform: translate(-50%, -50%) translateY(-50px); /* Float upward */
+    opacity: 0; /* Fade out */
   }
 }
